@@ -2,8 +2,42 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { useState } from "react";
 
 const Index = () => {
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isRegisterOpen, setIsRegisterOpen] = useState(false);
+  const [loginForm, setLoginForm] = useState({ email: "", password: "" });
+  const [registerForm, setRegisterForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement login logic
+    console.log("Login:", loginForm);
+    setIsLoginOpen(false);
+  };
+
+  const handleRegister = (e: React.FormEvent) => {
+    e.preventDefault();
+    // TODO: Implement registration logic
+    console.log("Register:", registerForm);
+    setIsRegisterOpen(false);
+  };
   const tradingSignals = [
     {
       pair: "EUR/USD",
@@ -117,10 +151,226 @@ const Index = () => {
             Личный кабинет
           </a>
         </div>
-        <Button className="bg-emerald-500 hover:bg-emerald-600 text-white">
-          <Icon name="User" size={16} className="mr-2" />
-          Войти
-        </Button>
+        <div className="flex gap-2">
+          <Dialog open={isLoginOpen} onOpenChange={setIsLoginOpen}>
+            <DialogTrigger asChild>
+              <Button
+                variant="outline"
+                className="border-slate-600 text-white hover:bg-slate-800"
+              >
+                <Icon name="LogIn" size={16} className="mr-2" />
+                Войти
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-slate-800 border-slate-700 text-white">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl">
+                  <Icon
+                    name="TrendingUp"
+                    className="text-emerald-400 mx-auto mb-2"
+                    size={28}
+                  />
+                  Вход в ForexPro AI
+                </DialogTitle>
+              </DialogHeader>
+              <form onSubmit={handleLogin} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="login-email">Email</Label>
+                  <Input
+                    id="login-email"
+                    type="email"
+                    placeholder="trader@example.com"
+                    className="bg-slate-700 border-slate-600 text-white"
+                    value={loginForm.email}
+                    onChange={(e) =>
+                      setLoginForm({ ...loginForm, email: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="login-password">Пароль</Label>
+                  <Input
+                    id="login-password"
+                    type="password"
+                    placeholder="••••••••"
+                    className="bg-slate-700 border-slate-600 text-white"
+                    value={loginForm.password}
+                    onChange={(e) =>
+                      setLoginForm({ ...loginForm, password: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-emerald-500 hover:bg-emerald-600"
+                >
+                  <Icon name="LogIn" size={16} className="mr-2" />
+                  Войти в аккаунт
+                </Button>
+                <div className="relative">
+                  <Separator className="bg-slate-600" />
+                  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 px-2 text-sm text-slate-400">
+                    или
+                  </span>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-slate-600 text-white hover:bg-slate-700"
+                  onClick={() => {
+                    setIsLoginOpen(false);
+                    setIsRegisterOpen(true);
+                  }}
+                >
+                  <Icon name="UserPlus" size={16} className="mr-2" />
+                  Создать аккаунт
+                </Button>
+                <div className="text-center">
+                  <Button
+                    variant="link"
+                    className="text-emerald-400 hover:text-emerald-300"
+                  >
+                    Забыли пароль?
+                  </Button>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog open={isRegisterOpen} onOpenChange={setIsRegisterOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-emerald-500 hover:bg-emerald-600 text-white">
+                <Icon name="UserPlus" size={16} className="mr-2" />
+                Регистрация
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="bg-slate-800 border-slate-700 text-white max-w-md">
+              <DialogHeader>
+                <DialogTitle className="text-center text-xl">
+                  <Icon
+                    name="TrendingUp"
+                    className="text-emerald-400 mx-auto mb-2"
+                    size={28}
+                  />
+                  Регистрация в ForexPro AI
+                </DialogTitle>
+                <p className="text-slate-400 text-center text-sm">
+                  Присоединяйтесь к тысячам успешных трейдеров
+                </p>
+              </DialogHeader>
+              <form onSubmit={handleRegister} className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="register-name">Имя</Label>
+                  <Input
+                    id="register-name"
+                    type="text"
+                    placeholder="Иван Иванов"
+                    className="bg-slate-700 border-slate-600 text-white"
+                    value={registerForm.name}
+                    onChange={(e) =>
+                      setRegisterForm({ ...registerForm, name: e.target.value })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="register-email">Email</Label>
+                  <Input
+                    id="register-email"
+                    type="email"
+                    placeholder="trader@example.com"
+                    className="bg-slate-700 border-slate-600 text-white"
+                    value={registerForm.email}
+                    onChange={(e) =>
+                      setRegisterForm({
+                        ...registerForm,
+                        email: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="register-password">Пароль</Label>
+                  <Input
+                    id="register-password"
+                    type="password"
+                    placeholder="••••••••"
+                    className="bg-slate-700 border-slate-600 text-white"
+                    value={registerForm.password}
+                    onChange={(e) =>
+                      setRegisterForm({
+                        ...registerForm,
+                        password: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="register-confirm-password">
+                    Подтвердите пароль
+                  </Label>
+                  <Input
+                    id="register-confirm-password"
+                    type="password"
+                    placeholder="••••••••"
+                    className="bg-slate-700 border-slate-600 text-white"
+                    value={registerForm.confirmPassword}
+                    onChange={(e) =>
+                      setRegisterForm({
+                        ...registerForm,
+                        confirmPassword: e.target.value,
+                      })
+                    }
+                    required
+                  />
+                </div>
+                <div className="flex items-center space-x-2 text-sm text-slate-400">
+                  <Icon name="Shield" size={16} className="text-emerald-400" />
+                  <span>Все данные защищены 256-битным шифрованием</span>
+                </div>
+                <Button
+                  type="submit"
+                  className="w-full bg-emerald-500 hover:bg-emerald-600"
+                >
+                  <Icon name="Zap" size={16} className="mr-2" />
+                  Создать аккаунт и начать торговать
+                </Button>
+                <div className="relative">
+                  <Separator className="bg-slate-600" />
+                  <span className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-800 px-2 text-sm text-slate-400">
+                    или
+                  </span>
+                </div>
+                <Button
+                  type="button"
+                  variant="outline"
+                  className="w-full border-slate-600 text-white hover:bg-slate-700"
+                  onClick={() => {
+                    setIsRegisterOpen(false);
+                    setIsLoginOpen(true);
+                  }}
+                >
+                  <Icon name="LogIn" size={16} className="mr-2" />
+                  Уже есть аккаунт? Войти
+                </Button>
+                <div className="text-center text-xs text-slate-500">
+                  Регистрируясь, вы соглашаетесь с{" "}
+                  <a href="#" className="text-emerald-400 hover:underline">
+                    Условиями использования
+                  </a>{" "}
+                  и{" "}
+                  <a href="#" className="text-emerald-400 hover:underline">
+                    Политикой конфиденциальности
+                  </a>
+                </div>
+              </form>
+            </DialogContent>
+          </Dialog>
+        </div>
       </nav>
 
       {/* Hero Section */}
